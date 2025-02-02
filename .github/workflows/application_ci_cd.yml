@@ -30,8 +30,11 @@ jobs:
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 202533509557.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
       - run: ls -al
+        continue-on-error: true
       - run: cd target
+        continue-on-error: true
       - run: ls -al
+        continue-on-error: true
 
       # Build the Docker image
       - name: Build Docker image

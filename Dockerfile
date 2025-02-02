@@ -4,10 +4,10 @@ FROM eclipse-temurin:21-jdk
 # Set working directory
 WORKDIR /app
 
-RUN mvn clean package -DskipTests
-
 # Copy the Maven build files
-COPY target/practice-0.0.1-SNAPSHOT.jar app.jar
+COPY ./ app/
+
+RUN mvn clean package -DskipTests
 
 # Expose port 8080
 EXPOSE 8080
