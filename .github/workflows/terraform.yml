@@ -1,0 +1,50 @@
+name: Terraform Deploy to AWS
+
+on:
+  workflow_dispatch:
+
+#  push:
+#    branches:
+#      - main  # Trigger the workflow on push to the main branch
+#  pull_request:
+#    branches:
+#      - main  # Trigger the workflow on pull request to the main branch
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up AWS credentials using AWS CLI
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 3: Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.5.0  # Specify the desired Terraform version
+
+      # Step 4: Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 5: Validate Terraform configuration
+      - name: Terraform Validate
+        run: terraform validate
+
+      # Step 6: Run Terraform plan to see the changes
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      # Step 7: Apply Terraform plan (this is the actual deployment step)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
