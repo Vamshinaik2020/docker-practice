@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y maven
 WORKDIR /app
 
 # Copy the Maven build files
-COPY ./ app/
+COPY ./ ./
 
 RUN mvn clean package -DskipTests
 
